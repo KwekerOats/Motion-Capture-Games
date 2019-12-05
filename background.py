@@ -7,6 +7,7 @@ pygame.init()
 
 os.environ['SDL_VIDEO_CENTERED'] = "True"
 
+
 width, height = 1200,600
 screen = pygame.display.set_mode((width,height))
 
@@ -56,10 +57,15 @@ change = 0
 
 while menu:
 
+    click = False
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            click = True
     
     screen.blit(background,(0,0))
     screen.blit(menu_car, menu_car_pos)
@@ -98,6 +104,8 @@ while menu:
         textRect = text.get_rect()
         textRect.center = (startpos[0], startpos[1])
         screen.blit(text,textRect)
+        if click:
+            import dgame
     else:
         font = pygame.font.Font('Road_Rage.ttf',60)
         text = font.render('START', True, (255,100,200),(0))
@@ -111,6 +119,8 @@ while menu:
         textRect = text.get_rect()
         textRect.center = (helppos[0], helppos[1])
         screen.blit(text,textRect)
+        if click:
+            import dhelp
     else:
         font = pygame.font.Font('Road_Rage.ttf',30)
         text = font.render('help', True, (255,255,255),(0))
@@ -124,6 +134,8 @@ while menu:
         textRect = text.get_rect()
         textRect.center = (scorepos[0], scorepos[1])
         screen.blit(text,textRect)
+        if click:
+            import dleaderboard
     else:
         font = pygame.font.Font('Road_Rage.ttf',30)
         text = font.render('highscores', True, (255,255,255),(0))
@@ -132,13 +144,13 @@ while menu:
         screen.blit(text,textRect)
 
     font = pygame.font.Font('Road_Rage.ttf',130)
-    text = font.render('BIGBOI', True, (100,100,100),(0))
+    text = font.render('Road Rage', True, (100,100,100),(0))
     textRect = text.get_rect()
     textRect.center = (width/2 + 5, 105)
     screen.blit(text,textRect)
 
     font = pygame.font.Font('Road_Rage.ttf',130)
-    text = font.render('BIGBOI', True, (255,50,255),(0))
+    text = font.render('Road Rage', True, (255,50,255),(0))
     textRect = text.get_rect()
     textRect.center = (width/2, 100)
     screen.blit(text,textRect)
