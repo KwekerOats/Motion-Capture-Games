@@ -2,7 +2,6 @@ import pygame
 from pygame.locals import *
 import os
 import time
-#import background
 
 pygame.init()
 
@@ -18,6 +17,7 @@ lcount = 0
 lcount2 = 4
 
 def effects(lcount,lcount2):
+    
     lframe_size = [50,350]
     lframe = ['1','2','3','2','3','2','1','1','2','1','1','2','1','2','1']
     if lcount < len(lframe) - 1:
@@ -53,10 +53,15 @@ change = 0
 
 while menu:
 
+    click = False
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            click = True
     
     screen.blit(background,(0,0))
     
@@ -90,13 +95,14 @@ while menu:
         textRect.center = (calpos[0], calpos[1])
         screen.blit(text,textRect)
 
-    if calpos[0] - 150 < mouse[0] < calpos[0] + 75 and calpos[1] - 30 < mouse[1] < calpos[1] + 30:
-        import background
+    if 50 < mouse[0] < 150 and 530< mouse[1] < 570:
         font = pygame.font.Font('Road_Rage.ttf',45)
         text = font.render('back', True, (255,100,200),(0))
         textRect = text.get_rect()
         textRect.center = (100, 550)
         screen.blit(text,textRect)
+        if click:
+            import background
     else:
         font = pygame.font.Font('Road_Rage.ttf',30)
         text = font.render('back', True, (255,100,200),(0))

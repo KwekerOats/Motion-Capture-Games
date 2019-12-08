@@ -51,10 +51,10 @@ while p != len(leaderboard):
         i = 0
     count += 1
 
-with open('fileName.csv', 'w') as f:
+'''with open('fileName.csv', 'w') as f:
     for x in range(len(leaderboard)):
         f.write(leaderboard[x],)
-        f.write( leaderboard_name[x])
+        f.write( leaderboard_name[x])'''
 
 lcount = 0
 lcount2 = 4
@@ -97,10 +97,16 @@ def effects(lcount,lcount2,fcount):
 
 while menu:
 
+    click = False
+    mouse = pygame.mouse.get_pos()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            click = True
     
     screen.blit(background,(0,0))
 
@@ -189,5 +195,21 @@ while menu:
     textRect = text.get_rect()
     textRect.center = (width/2 + 100 , 450)
     screen.blit(text,textRect)
+
+    if 50 < mouse[0] < 150 and 530< mouse[1] < 570:
+        font = pygame.font.Font('Road_Rage.ttf',45)
+        text = font.render('back', True, (255,100,200),(0))
+        textRect = text.get_rect()
+        textRect.center = (100, 550)
+        screen.blit(text,textRect)
+        if click:
+            import background
+
+    else:
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render('back', True, (255,100,200),(0))
+        textRect = text.get_rect()
+        textRect.center = (100, 550)
+        screen.blit(text,textRect)
 
     pygame.display.update()

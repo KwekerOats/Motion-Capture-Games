@@ -105,7 +105,7 @@ while menu:
         textRect.center = (startpos[0], startpos[1])
         screen.blit(text,textRect)
         if click:
-            import dgame
+            os.system('dgame.py')
     else:
         font = pygame.font.Font('Road_Rage.ttf',60)
         text = font.render('START', True, (255,100,200),(0))
@@ -120,7 +120,7 @@ while menu:
         textRect.center = (helppos[0], helppos[1])
         screen.blit(text,textRect)
         if click:
-            import dhelp
+            os.system('dhelp.py')
     else:
         font = pygame.font.Font('Road_Rage.ttf',30)
         text = font.render('help', True, (255,255,255),(0))
@@ -135,7 +135,7 @@ while menu:
         textRect.center = (scorepos[0], scorepos[1])
         screen.blit(text,textRect)
         if click:
-            import dleaderboard
+            os.system('dleaderboard.py')
     else:
         font = pygame.font.Font('Road_Rage.ttf',30)
         text = font.render('highscores', True, (255,255,255),(0))

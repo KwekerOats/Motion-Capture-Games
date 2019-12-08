@@ -6,24 +6,21 @@ import os
 from pygame.locals import *
 
 pygame.init()
-os.environ['SDL_VIDEO_CENTERED'] = "True"
 width, height = 1200, 600
 screen=pygame.display.set_mode((width, height))
 batpos =[width/4,(height/3)*2]
 ballpos =[width/4, batpos[1]]#(height/4)*3]
-ball2pos = [575,520]
 
 ball = pygame.image.load('kweku4.PNG')
 ball = pygame.transform.scale(ball, (50,100))
 bat = pygame.image.load('bat.PNG')
 bat = pygame.transform.scale(bat, (100,100))
-ball2 = pygame.transform.scale(ball, (25,25))
 #s.diamond = pygame.image.load('baseball pitch.PNG').convert()
 #s.rect = b.diamond.get_rect()
 #s.rect.center = (width/2,(height/4)*3)
 diamond = pygame.image.load('baseball pitch.PNG')
-diamond = pygame.transform.scale(diamond, (800, 600))
-diamondpos = [200, 100]
+diamond = pygame.transform.scale(diamond, (500,500))
+diamondpos = [350, 150]
 game_state = True
 
 '''def throw(ballpos):
@@ -36,21 +33,27 @@ game_state = True
 
 power_val = [64,32,128]
 
-class Fielder(object): # creates the fielders
+class Fielder(object):
+    number = 0
+    pos = []
+    running = False
+
     def __init__(self, number, pos, running):
         self.number = number
         self.pos = pos
         self.running = running
 
-fielders = []
+def make_fielder(number, pos, running):
+    for x in range(7):
+        fielder.number = x
+        fielder.pos = (random.randint,random.randint)
+        fielder.running = False
+        
+        fielder = Fielder(number, pos, running)
+        return fielder
 
-fielders.append(Fielder(1, [600, 350], False))
-fielders.append(Fielder(2, [450, 450], False))
-fielders.append(Fielder(3, [750, 450], False))
-for x in range(4,8):
-    fielders.append(Fielder(x, [random.randint(350,950), random.randint(100,350)], False))
 
-def hit(ballpos,power,ball): #animation for a hit
+def hit(ballpos,power,ball): #ball animation for a hit
     for _ in range(power):
         ballpos[0],ballpos[1] = ballpos[0] + 2,ballpos[1] - 4
         screen.blit(ball,ballpos)
@@ -77,22 +80,10 @@ def hit(ballpos,power,ball): #animation for a hit
 
     screen.fill((40,200,120))
     screen.blit(diamond, diamondpos)
+
     
-    for x in fielders:
-        pygame.draw.circle(screen, (255,0,0), (x.pos[0], x.pos[1]), 10)
-
-    pygame.display.update()    
-
-    speed = random.randint(1,6)# testing data
-    curve = random.randint(-3,3)
-    power2 = 80
-    for _ in range(power2):
-        ball2pos[0], ball2pos[1] = ball2pos[0] + curve, ball2pos[1] - speed
-        screen.blit(ball2, ball2pos)
-        if curve % 2 == 0:
-            curve += curve/2
-        pygame.display.update()
-        time.sleep(.05)
+    pygame.display.update()
+    time.sleep(10)
 
 def swing_animation(bat,mousepos): #bat swing animation
     for _ in range(2):
@@ -145,6 +136,7 @@ while game_state: #main game loop
 
     screen.blit(ball,ballpos)
     if batpos[0] - 100 < ballpos[0] < batpos[0] + 100 and batpos[1] - 100 < ballpos[1] < batpos[1] + 100 and swing_state:
+        print('wesfg')
         hit(ballpos,power,ball)
     
-    pygame.display.update()
+    pygame.display.flip()
