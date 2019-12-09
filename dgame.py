@@ -2,6 +2,9 @@ import pygame
 from pygame.locals import *
 import os
 import time
+from mpu6050 import mpu6050
+import math
+import smbus
 
 os.environ['SDL_VIDEO_CENTERED'] = "True"
 
@@ -9,9 +12,9 @@ pygame.init()
 width, height = 1200, 600
 screen=pygame.display.set_mode((width, height))
 
-backdrop = pygame.image.load('mountain range.PNG')
+backdrop = pygame.image.load('mountain range.png')
 backdrop = pygame.transform.scale(backdrop, (10000,600))
-player = pygame.image.load('mario back.PNG')
+player = pygame.image.load('mario back.png')
 player = pygame.transform.scale(player, (2000,1000))
 playerpos =[550,400]
 
@@ -21,6 +24,9 @@ view = 0
 pview = 0
 
 road = []
+
+sensor = mpu6050(0x68)
+
 for _ in range(100):
     for x in range(100):
         road.append(0)
@@ -38,26 +44,6 @@ for _ in range(100):
         road.append(-250)
     for x in range(-250,0):
         road.append(x)
-    '''for x in range(150):
-        road.append(0)
-    for x in range(0,250,2):
-        road.append(x)
-    for x in range(100):
-        road.append(250)
-    for x in range(250,0,-1):
-        road.append(x)
-    for x in range(10):
-        road.append(0)
-    for x in range(0,-180,-3):
-        road.append(x)
-    for x in range(-180,-90):
-        road.append(x)
-    for x in range(-90,-250,-4):
-        road.append(x)
-    for x in range(70):
-        road.append(-250)
-    for x in range(-250,0,1):
-        road.append(x)'''
 
 y = 50
 iy =0
@@ -67,6 +53,9 @@ vibrate = 2
 speedchange = -4
 p = pygame.time.get_ticks()
 while True:
+
+    x_orientation = sensor.get_gyro_data(x)
+    y_orientation = sensor.get_gyro_data(y)
     
     for event in pygame.event.get():            
         if event.type == pygame.QUIT:
@@ -75,29 +64,38 @@ while True:
             
         if event.type == pygame.KEYDOWN:
             if event.key==K_a and keys[3] == False:
-                player = pygame.image.load('mario left.PNG')
+                player = pygame.image.load('mario left.png')
                 player = pygame.transform.scale(player, (200,200))
                 keys[1]=True
             elif event.key==K_d and keys[1] == False:
                 keys[3]=True
-                player = pygame.image.load('mario left.PNG')
+                player = pygame.image.load('mario left.png')
                 player = pygame.transform.flip(player, True, False)
                 player = pygame.transform.scale(player, (200,200))
         if event.type == pygame.KEYUP:
             if event.key == K_a and keys[3] == False:
-                player = pygame.image.load('mario back.PNG')
+                player = pygame.image.load('mario back.png')
                 player = pygame.transform.scale(player, (2000,1000))
                 keys[1]=False
             elif event.key == K_d and keys[1] == False:
-                player = pygame.image.load('mario back.PNG')
+                player = pygame.image.load('mario back.png')
                 player = pygame.transform.scale(player, (2000,1000))
                 keys[3]=False
+
     if keys[1]:
         view += 7
         pview += 2
     if keys[3]:
         view -= 7
         pview -= 2
+
+    if y_orientation >= 1:
+        keys[1] = True
+    elif y_orientation <= -1:
+        keys[3] = True
+    else:
+        keys[1],keys[3] = False,False
+
 
     vibrate = -vibrate
     playerpos[1] += vibrate
