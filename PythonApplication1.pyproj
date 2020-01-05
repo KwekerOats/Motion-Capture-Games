@@ -1,0 +1,130 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>c483a74b-192a-4397-83ce-e46994019465</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>ddrgame.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>PythonApplication1</Name>
+    <RootNamespace>PythonApplication1</RootNamespace>
+    <InterpreterId>MSBuild|env1|$(MSBuildProjectFullPath)</InterpreterId>
+    <TestFramework>Pytest</TestFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="2 player test.py" />
+    <Compile Include="background.py" />
+    <Compile Include="baseballgame.py" />
+    <Compile Include="baseballmenu.py" />
+    <Compile Include="ddrgame.py" />
+    <Compile Include="dgame broken.py" />
+    <Compile Include="dgame.py" />
+    <Compile Include="dhelp.py" />
+    <Compile Include="dleaderboard.py" />
+    <Compile Include="dmenu.py" />
+    <Compile Include="driving game.py" />
+    <Compile Include="dsmoothing_algorithms.py" />
+    <Compile Include="pong good.py" />
+    <Compile Include="pong.py" />
+    <Compile Include="testgame.py" />
+    <Compile Include="wasd test.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="17803B68-93E0-4A9F-A995-76B363E32FC3.png" />
+    <Content Include="386B89FE-50E4-4381-821C-C737DF8E169F.png" />
+    <Content Include="579B0E26-5AF6-4559-B99B-93614A0548C7.jpeg" />
+    <Content Include="5C32F4AB-E698-4769-9B34-D610D5DF6008.png" />
+    <Content Include="arrow.png" />
+    <Content Include="B048BD3C-EB90-4DA1-90BB-4B0977BE94A0.jpeg" />
+    <Content Include="back car.png" />
+    <Content Include="background.png" />
+    <Content Include="baseball pitch.png" />
+    <Content Include="bat.png" />
+    <Content Include="blue car.png" />
+    <Content Include="C19B772C-6CFB-43D5-84D7-DADD1B208363.jpeg" />
+    <Content Include="C5C732EE-BF5F-445B-9C16-987456349F2B.png" />
+    <Content Include="cars.png" />
+    <Content Include="ding_sf.wav" />
+    <Content Include="dleaderboards.csv" />
+    <Content Include="E2AE9A36-805C-4CFC-BCD5-D07CC688EAD2.jpeg" />
+    <Content Include="face.jpg" />
+    <Content Include="fileName.csv" />
+    <Content Include="joh1.png" />
+    <Content Include="joh2.png" />
+    <Content Include="joh3.png" />
+    <Content Include="joh4.png" />
+    <Content Include="joh5.png" />
+    <Content Include="joh6.png" />
+    <Content Include="joh7.png" />
+    <Content Include="jph2.png" />
+    <Content Include="kweku1.jpeg" />
+    <Content Include="kweku1.png" />
+    <Content Include="kweku2.png" />
+    <Content Include="kweku3.png" />
+    <Content Include="kweku4.png" />
+    <Content Include="kweku5.png" />
+    <Content Include="kweku6.png" />
+    <Content Include="kweku7.png" />
+    <Content Include="lightning effect.jpg" />
+    <Content Include="lightning sprites.gif" />
+    <Content Include="lightning1.png" />
+    <Content Include="lightning2.png" />
+    <Content Include="lightning3.png" />
+    <Content Include="mario back.png" />
+    <Content Include="mario left.png" />
+    <Content Include="mario right.png" />
+    <Content Include="mountain range.png" />
+    <Content Include="no_sf.wav" />
+    <Content Include="ooh_sf.wav" />
+    <Content Include="poster car.png" />
+    <Content Include="READ ME.txt" />
+    <Content Include="Red Car.png" />
+    <Content Include="Road_Rage.otf" />
+    <Content Include="Road_Rage.ttf" />
+    <Content Include="side car.png" />
+    <Content Include="sidecar.jpg" />
+    <Content Include="song1.mp3" />
+    <Content Include="song1.wav" />
+    <Content Include="wdfghjk.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="env1\">
+      <Id>env1</Id>
+      <Version>3.7</Version>
+      <Description>env1 (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
+    <Interpreter Include="env\">
+      <Id>env</Id>
+      <Version>3.7</Version>
+      <Description>env (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>
