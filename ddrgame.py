@@ -1,11 +1,40 @@
 import pygame
-import os
 from pygame.locals import *
+import os
 import random
 import time
-import soundfile as sn
 import cv2
 import numpy as np
+import csv
+
+def login_signup():
+    while True:
+        choice = input('l for login, s for signup')
+        if choice == "l":
+            username = input('u')
+            password = input('p')
+            f = open("login.csv","r")
+            for line in f:
+                details = line.split(",")
+                if username == details[0] and str(password)+'\n' == details[1]:
+                    return username
+
+        elif choice == 's':
+            username = input()
+            password = input()
+
+            f = open("login.csv","r")
+            for line in f:
+                details = line.split(",")
+                if username == details[0]:
+                    login_signup()
+            with open('login.csv', 'a', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow((username, password))
+        return username
+
+player_name = login_signup()
+print(player_name)
 
 os.environ['SDL_VIDEO_CENTERED'] = "True"
 
@@ -24,7 +53,10 @@ size = 50
 startan = 10
 move = 'pause'
 avex2, avey2 = 0,0
-calibrated = false
+calibrated = False
+Game = True
+h = 0
+score = 0
 
 llsquare,lmsquare,rmsquare,rrsquare = colour,colour,colour,colour
 
@@ -58,24 +90,48 @@ def miss_check(timer,lltimes,lmtimes,rmtimes,rrtimes):
             rrtimes.remove(x)
             return True
 
+def save_score(score,player_name):
+    with open('ddr leaderboard.csv', 'a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow((score, player_name))
+
+    '''with open('ddr leaderboard.csv', 'r', newline='') as file:
+        score_list = list(csv.reader(file))
+        for row in score_list[0,5]:
+            print(row)'''
+
 pygame.mixer.music.load('song1.wav')
 miss_sound = pygame.mixer.Sound('no_sf.wav')
 hit_sound = pygame.mixer.Sound('ding_sf.wav')
 hit_sound2 = pygame.mixer.Sound('ooh_sf.wav')
 
-rrtimes = [random.randint(2,50)/2 for x in range(10)]
-rmtimes = [random.randint(2,50)/2 for x in range(10)]
-lmtimes = [random.randint(2,50)/2 for x in range(10)]
-lltimes = [random.randint(2,50)/2 for x in range(10)]
- 
-start_time = time.time()
-pygame.mixer.music.play()
+while 1:
+    pygame.mixer.Sound.play(hit_sound2)
+
+rrtimes = []
+rmtimes = []
+lmtimes = []
+lltimes = []
+
+choice = []
+for x in range(4,400,4):
+    choice = random.randint(1,4)
+    if choice == 1:
+        rrtimes.append(x/5)
+    elif choice == 2:
+        rmtimes.append(x/5)
+    elif choice == 3:
+        lmtimes.append(x/5)
+    else:
+        lltimes.append(x/5)
+
 
 cap = cv2.VideoCapture(0)
 
-
-while True:
-    while calibrated = False:
+play = 0
+while Game:
+    pygame.display.update()
+    while calibrated == False:
         try:
             #median smoothing
             '''if len(ave_x) == 5:
@@ -128,13 +184,13 @@ while True:
 
             avex1 = (t02+t01+t+t1+t2)/5
             avey1 = (p02+p01+p+p1+p2)/5
-            if avex1 + 25 <= avex2:
+            if avex1 + 10 <= avex2:
                 move = 'left'
-            elif avex1 - 25 >= avex2:
+            elif avex1 - 10 >= avex2:
                 move = 'right'
-            elif avey1 + 25 <= avey2:
+            elif avey1 + 10 <= avey2:
                 move = 'up'
-            elif avey1 - 25 >= avey2:
+            elif avey1 - 10 >= avey2:
                 move = 'down'
             else:
                 move = 'still'
@@ -151,12 +207,49 @@ while True:
         upper_red = np.array([30,255,255])
         mask = cv2.inRange(image, lower_red, upper_red)  
         coord = cv2.findNonZero(mask)
-        if move = 'still':
+        if move == 'still':
             h += 1
         else:
-            h = 0
+            h = 0            
+            font = pygame.font.Font('Road_Rage.ttf',10)
+            text = font.render('pls point your controller at the screen and keep it still', True, (255,100,200),(0))
+            textRect = text.get_rect()
+            textRect.center = (width/2, height/2)
+            screen.blit(text,textRect)
+        if h == 100:
+            for _ in range(500):
+                screen.fill(0)
+                pygame.draw.circle(screen, (0,255,0), (int(width/2),int(height/2)), 20,0)
+                pygame.display.update()
+            calibrated = True
 
+        try:
+            pygame.draw.circle(screen, colour, (int(avex1),int(avey1)), 20,0)
+            font = pygame.font.Font('Road_Rage.ttf',15)
+            text = font.render(str(100-h), True, (255,100,200),(0))
+            textRect = text.get_rect()
+            textRect.center = (width/2, height/2)
+            screen.blit(text,textRect)
+        except:
+            screen.fill(0)
+            font = pygame.font.Font('Road_Rage.ttf',12)
+            text = font.render('please point your controller at the screen and keep it still until the timer is done', True, (255,100,200),(0))
+            textRect = text.get_rect()
+            textRect.center = (width/2, height/2)
+            screen.blit(text,textRect)
+        pygame.display.update()
+        screen.fill(0)
+
+    if calibrated == True:
+        play += 1
+    if play == 1:
+        start_time = time.time()
+        #pygame.mixer.music.play()
     timer = time.time() - start_time
+    if int(timer) == 85:
+        save_score(score,player_name)
+        Game = False
+
     llsquare,lmsquare,rmsquare,rrsquare = colour,colour,colour,colour
 
     try:
@@ -213,11 +306,11 @@ while True:
         avey1 = (p02+p01+p+p1+p2)/5
         if avex1 + 25 <= avex2:
             move = 'left'
-        elif avex1 - 25 >= avex2:
+        elif avex1 - 15 >= avex2:
             move = 'right'
-        elif avey1 + 25 <= avey2:
+        elif avey1 + 15 <= avey2:
             move = 'up'
-        elif avey1 - 25 >= avey2:
+        elif avey1 - 15 >= avey2:
             move = 'down'
         else:
             move = 'still'
@@ -227,9 +320,7 @@ while True:
     except:
         move = 'pause'
 
-   
 
-    
     _, frame = cap.read()
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -253,7 +344,8 @@ while True:
             colour = (0,255,0)
             startan = 0
             pygame.mixer.Sound.play(hit_sound)
-        else:
+            score += 1
+        elif startan >= 10:
             colour = (255,0,0)
             startan = 0
             pygame.mixer.Sound.play(miss_sound)
@@ -265,7 +357,8 @@ while True:
             colour = (0,255,0)
             startan = 0
             pygame.mixer.Sound.play(hit_sound2)
-        else:
+            score += 1
+        elif startan >= 10:
             colour = (255,0,0)
             startan = 0
             pygame.mixer.Sound.play(miss_sound)
@@ -277,7 +370,8 @@ while True:
             colour = (0,255,0)
             startan = 0
             pygame.mixer.Sound.play(hit_sound)
-        else:
+            score += 1
+        elif startan >= 10:
             colour = (255,0,0)
             startan = 0
             pygame.mixer.Sound.play(miss_sound)
@@ -289,9 +383,13 @@ while True:
             colour = (0,255,0)
             startan = 0
             pygame.mixer.Sound.play(hit_sound2)
-        else:
+            score += 1
+        elif startan >= 10:
             colour = (255,0,0)
             startan = 0
+
+    #if move == 'pause':
+        #pause()
 
     for event in pygame.event.get():            
         if event.type == pygame.QUIT:
@@ -357,8 +455,13 @@ while True:
     pygame.draw.rect(screen, (255,255,255), (width*.75 - 5, 0, 10, height))
     pygame.draw.rect(screen, (255,255,255), (width - 5, 0, 10, height))
     pygame.draw.rect(screen, (255,255,255), (-5, 0, 10, height))
+    
+    try:
+        pygame.draw.circle(screen, (255,255,0), (int(avex1),int(avey1)), 5,0)
+    except:
+        null
 
-    if startan >= 40:
+    if startan >= 20:
         colour = (0,0,255)
     else:
         hit_animation()
@@ -380,8 +483,14 @@ while True:
         #pygame.draw.rect(screen,(255,255,255),(width - 100,(rrtimes[x] - timer)*100 + height/20,size,size))
         screen.blit(rarrow, (width - 100,(rrtimes[x] - timer)*100 + height/20))
 
-    font = pygame.font.Font('Road_Rage.ttf',40)
+    font = pygame.font.Font('Road_Rage.ttf',10)
     text = font.render(str("{:.0f}".format(timer)), True, (255,100,200),(0))
+    textRect = text.get_rect()
+    textRect.center = (width/2, height/100)
+    screen.blit(text,textRect)
+
+    font = pygame.font.Font('Road_Rage.ttf',40)
+    text = font.render(str(score), True, (255,100,200),(0))
     textRect = text.get_rect()
     textRect.center = (width/2, height/2)
     screen.blit(text,textRect)
@@ -392,4 +501,4 @@ while True:
         pygame.mixer.Sound.play(miss_sound)
 
     pygame.display.update()
-    
+
