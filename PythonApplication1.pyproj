@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>c483a74b-192a-4397-83ce-e46994019465</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>ddrgame.py</StartupFile>
+    <StartupFile>dgame.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -48,6 +48,7 @@
     <Content Include="arrow.png" />
     <Content Include="B048BD3C-EB90-4DA1-90BB-4B0977BE94A0.jpeg" />
     <Content Include="back car.png" />
+    <Content Include="menu music.wav" />
     <Content Include="background.png" />
     <Content Include="baseball pitch.png" />
     <Content Include="bat.png" />
@@ -81,6 +82,7 @@
     <Content Include="lightning1.png" />
     <Content Include="lightning2.png" />
     <Content Include="lightning3.png" />
+    <Content Include="login.csv" />
     <Content Include="mario back.png" />
     <Content Include="mario left.png" />
     <Content Include="mario right.png" />

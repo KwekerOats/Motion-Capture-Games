@@ -24,15 +24,15 @@ road = []
 for _ in range(100):
     for x in range(100):
         road.append(0)
-    for x in range(0,250):
+    for x in range(0,250,2):
         road.append(x)
     for x in range(50):
         road.append(250)
-    for x in range(250,0,-1):
+    for x in range(250,0,-2):
         road.append(x)
     for x in range(50):
         road.append(0)
-    for x in range(0,-250,-1):
+    for x in range(0,-250,-2):
         road.append(x)
     for x in range(50):
         road.append(-250)
@@ -93,8 +93,8 @@ while True:
                 player = pygame.transform.scale(player, (2000,1000))
                 keys[3]=False
     if keys[1]:
-        view += 7
-        pview += 2
+        view += 10
+        pview += 3
     if keys[3]:
         view -= 7
         pview -= 2
@@ -105,14 +105,15 @@ while True:
     screen.fill(0)
     y = road[iy]
     iy += 1
-    speed += speedchange
+    speed += speedchange*2
 
     view += road[iy]/25
 
     rwidth = 25
     screen.blit(backdrop, (-(y/2) - 1000 + (pview*2),0 - 135))
+    screen.blit(backdrop, (-(y/2) - 3000 + (pview*2),0 - 135))
 
-    
+
     for x in range(1,400):
         turn = (x - 400)*-1
         speed += 1
@@ -127,6 +128,18 @@ while True:
         if speed%40 == 0:
             pygame.draw.rect(screen, (50,50,50), (view + width/2 - rwidth/2 + ((width/2 - rwidth / 2)* ((turn/100000) * y)),200 + x,(rwidth + turn/3)/20,100),0)
             pygame.draw.rect(screen, (50,50,50), (view + width/2 - rwidth/2 + ((width/2 - rwidth / 2)* ((turn/100000) * y)) + (rwidth + turn/3) - (rwidth + turn/3)/20,200 + x,(rwidth + turn/3)/20,10),0)
+        
+        perfect = pygame.Surface(((rwidth + turn/3)/5,1))
+        perfect.set_alpha(25)
+        perfect.fill((0,255,0))
+        screen.blit(perfect, (view + width/2 - rwidth/2 + ((width/2 - rwidth / 2)* ((turn/100000) * y)) + (rwidth + turn/3)/2 - (rwidth + turn/3)/10,200 + x))
+        
+        '''good = pygame.Surface((200+ x, rwidth + turn/3))
+        good.set_alpha(25)
+        good.fill((0,255,100))
+        screen.blit(good, (view + width/2 - rwidth/2 + ((width/2 - rwidth / 2)* ((turn/100000) * y)),200 + x))
+        screen.blit(good, (view + width/2 - rwidth/2 + ((width/2 - rwidth / 2)* ((turn/100000) * y)) + (rwidth + turn/3) - (rwidth + turn/3),200 + x))'''
+
 
 
         rwidth += 3

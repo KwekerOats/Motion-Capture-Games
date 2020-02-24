@@ -8,6 +8,146 @@ import numpy as np
 import csv
 
 def login_signup():
+
+    def login():
+        while 1:
+            mousepos = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+
+            screen.fill(0)
+            font = pygame.font.Font('Road_Rage.ttf',25)
+            text = font.render('LOGIN', True, (255,255,255),(0))
+            textRect = text.get_rect()
+            textRect.center = (width/8, height/10)
+            screen.blit(text,textRect) 
+
+            font = pygame.font.Font('Road_Rage.ttf',40)
+            text1 = font.render(str(''.join(textbox1)), True, (255,100,200),(255,255,255))
+            text1Rect = text1.get_rect()
+            text1Rect.center = (usernamepos[0], usernamepos[1])
+            screen.blit(text1,text1Rect)
+
+            font = pygame.font.Font('Road_Rage.ttf',40)
+            text2 = font.render(str(''.join(textbox2)), True, (255,100,200),(255,255,255))
+            text2Rect = text2.get_rect()
+            text2Rect.center = (passwordpos[0], passwordpos[1])
+            screen.blit(text2,text2Rect)
+
+            font = pygame.font.Font('Road_Rage.ttf',30)
+            context = font.render('continue', True, (255,100,200),(0))
+            contextRect = context.get_rect()
+            contextRect.center = (width - width/5, height - height/5)
+            screen.blit(context,contextRect)
+
+            for event in pygame.event.get():
+                if event.type == pygame.KEYUP:
+                    if event.key == K_BACKSPACE:
+                        if text1Rect.collidepoint(mousepos[0],mousepos[1]):
+                            textbox1.pop(-1)
+                        if text2Rect.collidepoint(mousepos[0],mousepos[1]):
+                            textbox2.pop(-1)
+                    else:
+                        if text1Rect.collidepoint(mousepos[0],mousepos[1]):
+                            textbox1.append(pygame.key.name(event.key))
+                        elif text2Rect.collidepoint(mousepos[0],mousepos[1]):
+                            textbox2.append(pygame.key.name(event.key))
+
+                if event.type == pygame.MOUSEBUTTONUP and contextRect.collidepoint(mousepos[0],mousepos[1]):
+                    password = ''.join(textbox2)
+                    username = ''.join(textbox1)
+                    f = open("login.csv","r")
+                    for line in f:
+                        details = line.split(",")
+                        print(line)
+                        print(details)
+                        if str(username) == details[0] and str(password) + '\n' == details[1]:
+                            screen.fill(0)
+                            font = pygame.font.Font('Road_Rage.ttf',90)
+                            text1 = font.render(str('login successful'), True, (255,100,200),(0))
+                            text1Rect = text1.get_rect()
+                            text1Rect.center = (width/2, height/2)
+                            screen.blit(text1,text1Rect)
+                            pygame.display.update()
+                            time.sleep(5)
+                            menu(username)
+                    login_signup()
+
+            pygame.display.update()
+
+    def signup():
+        while True:
+            mousepos = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            
+            screen.fill(0)
+            font = pygame.font.Font('Road_Rage.ttf',25)
+            text = font.render('SIGN UP', True, (255,255,255),(0))
+            textRect = text.get_rect()
+            textRect.center = (width/8, height/10)
+            screen.blit(text,textRect) 
+        
+            font = pygame.font.Font('Road_Rage.ttf',40)
+            text1 = font.render(str(''.join(textbox1)), True, (255,100,200),(255,255,255))
+            text1Rect = text1.get_rect()
+            text1Rect.center = (usernamepos[0], usernamepos[1])
+            screen.blit(text1,text1Rect)
+
+            font = pygame.font.Font('Road_Rage.ttf',40)
+            text2 = font.render(str(''.join(textbox2)), True, (255,100,200),(255,255,255))
+            text2Rect = text2.get_rect()
+            text2Rect.center = (passwordpos[0], passwordpos[1])
+            screen.blit(text2,text2Rect)
+
+            font = pygame.font.Font('Road_Rage.ttf',30)
+            context = font.render('continue', True, (255,100,200),(0))
+            contextRect = context.get_rect()
+            contextRect.center = (width - width/5, height - height/5)
+            screen.blit(context,contextRect)
+
+            for event in pygame.event.get():
+                if event.type == pygame.KEYUP:
+                    if event.key == K_BACKSPACE:
+                        if text1Rect.collidepoint(mousepos[0],mousepos[1]):
+                            textbox1.pop(-1)
+                        if text2Rect.collidepoint(mousepos[0],mousepos[1]):
+                            textbox2.pop(-1)
+                    else:
+                        if text1Rect.collidepoint(mousepos[0],mousepos[1]):
+                            textbox1.append(pygame.key.name(event.key))
+                        elif text2Rect.collidepoint(mousepos[0],mousepos[1]):
+                            textbox2.append(pygame.key.name(event.key))
+
+                if event.type == pygame.MOUSEBUTTONUP and contextRect.collidepoint(mousepos[0],mousepos[1]):
+                    username = ''.join(textbox1)
+                    password = ''.join(textbox2)
+                    f = open("login.csv","r")
+                    for line in f:
+                        details = line.split(",")
+                        if username == details[0]:
+                            login_signup()
+                    with open('login.csv', 'a', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(([username, password]))
+                    screen.fill(0)
+                    font = pygame.font.Font('Road_Rage.ttf',90)
+                    text1 = font.render(str('login successful'), True, (255,100,200),(0))
+                    text1Rect = text1.get_rect()
+                    text1Rect.center = (width/2, height/2)
+                    screen.blit(text1,text1Rect)
+                    pygame.display.update()
+                    time.sleep(5)
+                    menu(username)
+
+            pygame.display.update()
+
     os.environ['SDL_VIDEO_CENTERED'] = "True"
     width, height = 1200,600
     screen = pygame.display.set_mode((width,height))
@@ -15,96 +155,42 @@ def login_signup():
 
     usernamepos = (width/2, (height/5)*2)
     passwordpos = (width/2, (height/5)*4)
+    
 
     textbox1 = [' ']
     textbox2 = [' ']
     pointer = (0,0)
     choice = True
     while choice:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-        
-            
-
-    while login:
         mousepos = pygame.mouse.get_pos()
-        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
 
         screen.fill(0)
-        
         font = pygame.font.Font('Road_Rage.ttf',40)
-        text1 = font.render(str(''.join(textbox1)), True, (255,100,200),(255,255,255))
+        text1 = font.render('LOGIN', True, (255,100,200),(0))
         text1Rect = text1.get_rect()
-        text1Rect.center = (usernamepos[0], usernamepos[1])
+        text1Rect.center = (width/4,height/2)
         screen.blit(text1,text1Rect)
 
         font = pygame.font.Font('Road_Rage.ttf',40)
-        text2 = font.render(str(''.join(textbox2)), True, (255,100,200),(255,255,255))
+        text2 = font.render('SIGN UP', True, (255,100,200),(0))
         text2Rect = text2.get_rect()
-        text2Rect.center = (passwordpos[0], passwordpos[1])
+        text2Rect.center = (width*.75,height/2)
         screen.blit(text2,text2Rect)
 
-        font = pygame.font.Font('Road_Rage.ttf',30)
-        context = font.render('continue', True, (255,100,200),(0))
-        contextRect = context.get_rect()
-        contextRect.center = (width - width/5, height - height/5)
-        screen.blit(context,contextRect)
 
         for event in pygame.event.get():
-            if event.type == pygame.KEYUP:
-                if event.key == K_BACKSPACE:
-                    if text1Rect.collidepoint(mousepos[0],mousepos[1]):
-                        textbox1.pop(-1)
-                    if text2Rect.collidepoint(mousepos[0],mousepos[1]):
-                        textbox2.pop(-1)
-                else:
-                    if text1Rect.collidepoint(mousepos[0],mousepos[1]):
-                        textbox1.append(pygame.key.name(event.key))
-                    elif text2Rect.collidepoint(mousepos[0],mousepos[1]):
-                        textbox2.append(pygame.key.name(event.key))
-
-            if event.type == pygame.MOUSEBUTTONUP and contextRect.collidepoint(mousepos[0],mousepos[1]):
-                textbox2.pop(0)
-                password = ''.join(textbox2)
-                textbox1.pop(0)
-                username = ''.join(textbox1)
-                f = open("login.csv","r")
-                for line in f:
-                    details = line.split(",")
-                    if username == details[0] and str(password)+'\n' == details[1]:
-                        screen.fill(0)
-                        font = pygame.font.Font('Road_Rage.ttf',90)
-                        text1 = font.render(str('login successful'), True, (255,100,200),(0))
-                        text1Rect = text1.get_rect()
-                        text1Rect.center = (width/2, height/2)
-                        screen.blit(text1,text1Rect)
-                        pygame.display.update()
-                        time.sleep(5)
-                        menu(username)
-
+            if event.type == pygame.MOUSEBUTTONUP:
+                if text1Rect.collidepoint(mousepos[0],mousepos[1]):
+                    login()
+                if text2Rect.collidepoint(mousepos[0],mousepos[1]):
+                    signup()
         pygame.display.update()
 
-
-        '''if choice == 's':
-            username = input('username: ')
-            password = input('password: ')
-
-            f = open("login.csv","r")
-            for line in f:
-                details = line.split(",")
-                if username == details[0]:
-                    login_signup()
-            with open('login.csv', 'a', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerow((username, password))'''
-
-def game(player_name):
+def game(username):
     pygame.init()
     width, height = 600, 600
     screen=pygame.display.set_mode((width, height))
@@ -157,10 +243,10 @@ def game(player_name):
                 rrtimes.remove(x)
                 return True
 
-    def save_score(score,player_name):
+    def save_score(score,username):
         with open('ddr leaderboard.csv', 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow((score, player_name))
+            writer.writerow((score, username))
 
         menu()
 
@@ -338,7 +424,7 @@ def game(player_name):
         timer = time.time() - start_time
         if int(timer) == 85:
             end_game()
-            save_score(score,player_name)
+            save_score(score,username)
             Game = False
             menu()
 
@@ -600,6 +686,8 @@ def menu(username):
     width, height = 1200,600
     screen = pygame.display.set_mode((width,height))
     pygame.init()
+    pygame.mixer.music.load('menu music.wav')
+    pygame.mixer.music.play(-1)
 
     startpos = (width/2, height/4)
     scorepos = (width/4, (height/4)*3)
@@ -690,7 +778,7 @@ def menu(username):
         font = pygame.font.Font('Road_Rage.ttf',25)
         text = font.render(str(username), True, (255,255,255),(0))
         textRect = text.get_rect()
-        textRect.center = (width/4, height/5)
+        textRect.center = (width/8, height/10)
         screen.blit(text,textRect)        
         
         if startpos[0] - 150 < pointer[0] < startpos[0] + 150 and startpos[1] - 30 < pointer[1] < startpos[1] + 30:
@@ -698,7 +786,7 @@ def menu(username):
             pygame.draw.rect(screen, (255,255,255), (startpos[0],startpos[1],60,10))
             pygame.draw.rect(screen, (0,0,255), (startpos[0], startpos[1], start_time*1.5, 10))
             if start_time == 40:
-                game()
+                game(username)
         else:
             start_time = 0
 
@@ -723,6 +811,5 @@ def menu(username):
         pygame.draw.circle(screen, (255,255,0), (int(pointer[0]),int(pointer[1])), 5,0)
 
         pygame.display.update()
-
 
 login_signup()
