@@ -19,6 +19,7 @@ roadwidth = 100
 x = 100
 view = 0
 pview = 0
+score = 0
 
 road = []
 for _ in range(100):
@@ -38,26 +39,6 @@ for _ in range(100):
         road.append(-250)
     for x in range(-250,0):
         road.append(x)
-    '''for x in range(150):
-        road.append(0)
-    for x in range(0,250,2):
-        road.append(x)
-    for x in range(100):
-        road.append(250)
-    for x in range(250,0,-1):
-        road.append(x)
-    for x in range(10):
-        road.append(0)
-    for x in range(0,-180,-3):
-        road.append(x)
-    for x in range(-180,-90):
-        road.append(x)
-    for x in range(-90,-250,-4):
-        road.append(x)
-    for x in range(70):
-        road.append(-250)
-    for x in range(-250,0,1):
-        road.append(x)'''
 
 y = 50
 iy =0
@@ -133,28 +114,25 @@ while True:
         perfect.set_alpha(25)
         perfect.fill((0,255,0))
         screen.blit(perfect, (view + width/2 - rwidth/2 + ((width/2 - rwidth / 2)* ((turn/100000) * y)) + (rwidth + turn/3)/2 - (rwidth + turn/3)/10,200 + x))
-        
-        '''good = pygame.Surface((200+ x, rwidth + turn/3))
-        good.set_alpha(25)
-        good.fill((0,255,100))
-        screen.blit(good, (view + width/2 - rwidth/2 + ((width/2 - rwidth / 2)* ((turn/100000) * y)),200 + x))
-        screen.blit(good, (view + width/2 - rwidth/2 + ((width/2 - rwidth / 2)* ((turn/100000) * y)) + (rwidth + turn/3) - (rwidth + turn/3),200 + x))'''
-
-
 
         rwidth += 3
 
     speedchange = -4
     if view >= 550 or view <= -550:
-        time.sleep(.01)
-        '''add timer on'''
+        score -= 10
+    elif view >= -100 and view <= 100:
+        score += 10
+    elif view >= -250 and view <= 250:
+        score += 5
+    else:
+        score += 2
     screen.blit(player,playerpos)
 
     roadwidth = 100
     x = 100
     
     font = pygame.font.Font('Road_Rage.ttf',50)
-    text = font.render(str(int((pygame.time.get_ticks() - p)/1000)), True, (255,255,255),(0))
+    text = font.render(str(score), True, (255,255,255),(0))
     textRect = text.get_rect()
     textRect.center = (width/2, 100)
     screen.blit(text,textRect)

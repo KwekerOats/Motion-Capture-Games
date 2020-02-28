@@ -7,10 +7,12 @@ import cv2
 import numpy as np
 import csv
 
+#login and sign up
 def login_signup():
 
     def login():
         while 1:
+            pause()
             mousepos = pygame.mouse.get_pos()
 
             for event in pygame.event.get():
@@ -72,7 +74,7 @@ def login_signup():
                             text1Rect.center = (width/2, height/2)
                             screen.blit(text1,text1Rect)
                             pygame.display.update()
-                            time.sleep(5)
+                            time.sleep(4)
                             menu(username)
                     login_signup()
 
@@ -181,6 +183,12 @@ def login_signup():
         text2Rect.center = (width*.75,height/2)
         screen.blit(text2,text2Rect)
 
+        font = pygame.font.Font('Road_Rage.ttf',40)
+        text3 = font.render('SIGN UP', True, (255,100,200),(0))
+        text3Rect = text3.get_rect()
+        text3Rect.center = (width*.5,height*.75)
+        screen.blit(text3,text3Rect)
+
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP:
@@ -188,7 +196,201 @@ def login_signup():
                     login()
                 if text2Rect.collidepoint(mousepos[0],mousepos[1]):
                     signup()
+                if text3Rect.collidepoint(mousepos[0],mousepos[1]):
+                    menu('guest')
         pygame.display.update()
+
+def leaderboards(username):
+    width, height = 1200,600
+    screen = pygame.display.set_mode((width,height))
+
+    leaderboard = []
+    leaderboard_name = []
+
+    with open('ddr leaderboard.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 0
+        for row in csv_reader:
+            if line_count != 0:
+                leaderboard.append(row[0])
+                leaderboard_name.append(row[1])
+                line_count += 1
+            else:
+                line_count += 1
+        csv_file.close()
+            
+    count = 0
+    i = 0
+    p = 0
+    while p != len(leaderboard):
+        j = i + 1
+        if leaderboard[i] < leaderboard[j]:             
+            savenum = leaderboard[j]
+            leaderboard[j] = leaderboard[i]
+            leaderboard[i] = savenum
+            savenum_name = leaderboard_name[j]
+            leaderboard_name[j] = leaderboard_name[i]
+            leaderboard_name[i] = savenum_name
+            p = 0
+        else:
+            p += 1
+        i += 1
+        if i == len(leaderboard) - 1:
+            i = 0
+        count += 1
+
+    lcount = 0
+    lcount2 = 4
+    fcount = 0
+
+    def effects(lcount,lcount2,fcount):
+        lframe_size = [50,350]
+        lframe = ['1','2','3','2','3','2','1','1','2','1','1','2','1','2','1']
+        fframe = ['1','2','3','4','5','6','7','6','5','4','3','2',]
+        if lcount < len(lframe) - 1:
+            lcount += 1
+        else:
+            lcount = 0
+
+        if lcount2 < len(lframe) - 1:
+            lcount2 += 1
+        else:
+            lcount2 = 0
+
+        if fcount < len(fframe) - 1:
+            fcount += 1
+        else:
+            fcount = 0
+    
+        kweku = pygame.image.load('kweku' + fframe[fcount] + '.png')
+        kweku = pygame.transform.scale(kweku,(200,200))
+        joh = pygame.image.load('joh' + fframe[fcount] + '.png')
+        joh = pygame.transform.scale(joh,(200,200))
+        screen.blit(kweku, (100,300))
+        screen.blit(joh, (width - 375,300))
+        return lcount,lcount2,fcount
+
+    while menu:
+        pygame.init()
+
+        click = False
+        mouse = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                click = True
+
+        screen.fill(0)
+
+        lcount,lcount2,fcount = effects(lcount,lcount2,fcount)
+
+        font = pygame.font.Font('Road_Rage.ttf',100)
+        text = font.render('leaderboards', True, (100,100,100),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 + 5, 105)
+        screen.blit(text,textRect)
+
+        font = pygame.font.Font('Road_Rage.ttf',100)
+        text = font.render('leaderboards', True, (255,50,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2, 100)
+        screen.blit(text,textRect)
+
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard_name[0], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 - 150 , 200)
+        screen.blit(text,textRect)
+
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard_name[1], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 - 150 , 250)
+        screen.blit(text,textRect)
+
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard_name[2], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 - 150 , 300)
+        screen.blit(text,textRect)
+
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard_name[3], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 - 150 , 350)
+        screen.blit(text,textRect)
+    
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard_name[4], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 - 150 , 400)
+        screen.blit(text,textRect)
+
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard_name[5], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 - 150 , 450)
+        screen.blit(text,textRect)
+
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard[0], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 + 100 , 200)
+        screen.blit(text,textRect)
+
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard[1], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 + 100 , 250)
+        screen.blit(text,textRect)
+
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard[2], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 + 100 , 300)
+        screen.blit(text,textRect)
+
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard[3], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 + 100 , 350)
+        screen.blit(text,textRect)
+    
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard[4], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 + 100 , 400)
+        screen.blit(text,textRect)
+
+        font = pygame.font.Font('Road_Rage.ttf',30)
+        text = font.render(leaderboard[5], True, (255,255,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (width/2 + 100 , 450)
+        screen.blit(text,textRect)
+
+        if 50 < mouse[0] < 150 and 530< mouse[1] < 570:
+            font = pygame.font.Font('Road_Rage.ttf',45)
+            text = font.render('back', True, (255,100,200),(0))
+            textRect = text.get_rect()
+            textRect.center = (100, 550)
+            screen.blit(text,textRect)
+            if click:
+                menu(username)
+
+        else:
+            font = pygame.font.Font('Road_Rage.ttf',30)
+            text = font.render('back', True, (255,100,200),(0))
+            textRect = text.get_rect()
+            textRect.center = (100, 550)
+            screen.blit(text,textRect)
+
+        pygame.display.update()
+
+
 
 def game(username):
     pygame.init()
@@ -249,6 +451,235 @@ def game(username):
             writer.writerow((score, username))
 
         menu()
+
+    def pause():
+        pause = pygame.Surface(300,300)
+        pause.set_alpha(150)
+        pause.fill((255,255,255))
+    
+        font = pygame.font.Font('Road_Rage.ttf',50)
+        text = font.render('Resume', True, (0,0,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (400, 300)    
+    
+        font = pygame.font.Font('Road_Rage.ttf',50)
+        text2 = font.render('calibrate', True, (0,0,255),(0))
+        textRect2 = text2.get_rect()
+        textRect2.center = (200, 300)
+
+        font = pygame.font.Font('Road_Rage.ttf',50)
+        text3 = font.render('restart', True, (0,0,255),(0))
+        textRect3 = text3.get_rect()
+        textRect3.center = (300, 400)
+
+        while 1:
+            screen.fill(0)
+            mousepos = pygame.mouse.get_pos()
+            screen.blit(pause,(150,150))
+            screen.blit(text,textRect)
+            screen.blit(text2,textRect2)
+
+            for event in pygame.event.get():
+                if  event.type == pygame.MOUSEBUTTONUP and text2Rect.collidepoint(mousepos[0],mousepos[1]):
+                    return
+                elif event.type == pygame.MOUSEBUTTONUP and textRect.collidepoint(mousepos[0],mousepos[1]):
+                    while 1:
+                        try:
+                            try:
+                                t02 = t01
+                                p02 = p01
+                            except:
+                                move = 'connecting'
+                            try:
+                                t01 = t
+                                p01 = p
+                            except:
+                                move = 'connecting'
+                            try:
+                                t = t1
+                                p = p1
+                            except:
+                                move = 'connecting'
+                            try:
+                                t1 = t2
+                                p1 = p2
+                            except:
+                                move = 'connecting'
+                            t2 = coord[0][0][0]
+                            p2 = coord[0][0][1]
+
+                            avex1 = (t02+t01+t+t1+t2)/5
+                            avey1 = (p02+p01+p+p1+p2)/5
+                            if avex1 + 10 <= avex2:
+                                move = 'left'
+                            elif avex1 - 10 >= avex2:
+                                move = 'right'
+                            elif avey1 + 10 <= avey2:
+                                move = 'up'
+                            elif avey1 - 10 >= avey2:
+                                move = 'down'
+                            else:
+                                move = 'still'
+                            avex2 = avex1
+                            avey2 = avey1
+                        except:
+                            move = 'pause'
+
+                        _, frame = cap.read()
+                        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+                        image = frame
+                        lower_red = np.array([20,100,100])
+                        upper_red = np.array([30,255,255])
+                        mask = cv2.inRange(image, lower_red, upper_red)  
+                        coord = cv2.findNonZero(mask)
+                        if move == 'still':
+                            h += 1
+                        else:
+                            h = 0            
+                            font = pygame.font.Font('Road_Rage.ttf',10)
+                            text = font.render('pls point your controller at the screen and keep it still', True, (255,100,200),(0))
+                            textRect = text.get_rect()
+                            textRect.center = (width/2, height/2)
+                            screen.blit(text,textRect)
+                        if h == 100:
+                            for _ in range(500):
+                                screen.fill(0)
+                                pygame.draw.circle(screen, (0,255,0), (int(width/2),int(height/2)), 20,0)
+                                pygame.display.update()
+                            pause()
+
+                        try:
+                            pygame.draw.circle(screen, colour, (int(avex1),int(avey1)), 20,0)
+                            font = pygame.font.Font('Road_Rage.ttf',15)
+                            text = font.render(str(100-h), True, (255,100,200),(0))
+                            textRect = text.get_rect()
+                            textRect.center = (width/2, height/2)
+                            screen.blit(text,textRect)
+                        except:
+                            screen.fill(0)
+                            font = pygame.font.Font('Road_Rage.ttf',12)
+                            text = font.render('please point your controller at the screen and keep it still until the timer is done', True, (255,100,200),(0))
+                            textRect = text.get_rect()
+                            textRect.center = (width/2, height/2)
+                            screen.blit(text,textRect)
+                        pygame.display.update()
+
+    def pause():
+        pause = pygame.Surface((300,300))
+        pause.set_alpha(50)
+        pause.fill((255,255,255))
+    
+        font = pygame.font.Font('Road_Rage.ttf',20)
+        text = font.render('Resume', True, (0,0,255),(0))
+        textRect = text.get_rect()
+        textRect.center = (400, 300)    
+    
+        font = pygame.font.Font('Road_Rage.ttf',20)
+        text2 = font.render('calibrate', True, (0,0,255),(0))
+        textRect2 = text2.get_rect()
+        textRect2.center = (200, 300)
+        
+        cap = cv2.VideoCapture(0)
+
+        while 1:
+            screen.fill(0)
+            mousepos = pygame.mouse.get_pos()
+            screen.blit(pause,(150,150))
+            screen.blit(text,textRect)
+            screen.blit(text2,textRect2)
+            screen.blit(text3,text3Rect)
+            pygame.display.update()
+
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONUP and textRect.collidepoint(mousepos[0],mousepos[1]):
+                    return
+                elif event.type == pygame.MOUSEBUTTONUP and text3Rect.collidepoint(mousepos[0],mousepos[1]):
+                    game(username)
+                elif event.type == pygame.MOUSEBUTTONUP and text2Rect.collidepoint(mousepos[0],mousepos[1]):
+                    while 1:
+                        try:
+                            try:
+                                t02 = t01
+                                p02 = p01
+                            except:
+                                move = 'connecting'
+                            try:
+                                t01 = t
+                                p01 = p
+                            except:
+                                move = 'connecting'
+                            try:
+                                t = t1
+                                p = p1
+                            except:
+                                move = 'connecting'
+                            try:
+                                t1 = t2
+                                p1 = p2
+                            except:
+                                move = 'connecting'
+                            t2 = coord[0][0][0]
+                            p2 = coord[0][0][1]
+
+                            avex1 = (t02+t01+t+t1+t2)/5
+                            avey1 = (p02+p01+p+p1+p2)/5
+                            if avex1 + 10 <= avex2:
+                                move = 'left'
+                            elif avex1 - 10 >= avex2:
+                                move = 'right'
+                            elif avey1 + 10 <= avey2:
+                                move = 'up'
+                            elif avey1 - 10 >= avey2:
+                                move = 'down'
+                            else:
+                                move = 'still'
+                            avex2 = avex1
+                            avey2 = avey1
+                        except:
+                            move = 'pause'
+
+                        _, frame = cap.read()
+                        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+                        image = frame
+                        lower_red = np.array([20,100,100])
+                        upper_red = np.array([30,255,255])
+                        mask = cv2.inRange(image, lower_red, upper_red)  
+                        coord = cv2.findNonZero(mask)
+                        if move == 'still':
+                            h += 1
+                        else:
+                            h = 0            
+                            font = pygame.font.Font('Road_Rage.ttf',10)
+                            text = font.render('pls point your controller at the screen and keep it still', True, (255,100,200),(0))
+                            textRect = text.get_rect()
+                            textRect.center = (width/2, height/2)
+                            screen.blit(text,textRect)
+                        if h == 100:
+                            for _ in range(500):
+                                screen.fill(0)
+                                pygame.draw.circle(screen, (0,255,0), (int(width/2),int(height/2)), 20,0)
+                                pygame.display.update()
+                            pause()
+
+                        try:
+                            pygame.draw.circle(screen, colour, (int(avex1),int(avey1)), 20,0)
+                            font = pygame.font.Font('Road_Rage.ttf',15)
+                            text = font.render(str(100-h), True, (255,100,200),(0))
+                            textRect = text.get_rect()
+                            textRect.center = (width/2, height/2)
+                            screen.blit(text,textRect)
+                        except:
+                            screen.fill(0)
+                            font = pygame.font.Font('Road_Rage.ttf',12)
+                            text = font.render('please point your controller at the screen and keep it still until the timer is done', True, (255,100,200),(0))
+                            textRect = text.get_rect()
+                            textRect.center = (width/2, height/2)
+                            screen.blit(text,textRect)
+                        pygame.display.update()
+                        screen.fill(0)
+
 
     def end_game(score):
         for _ in range(100):
@@ -461,7 +892,7 @@ def game(username):
                 t02 = t01
                 p02 = p01
             except:
-                move = 'connecting'
+                move = 'connected'
             try:
                 t01 = t
                 p01 = p
@@ -494,9 +925,18 @@ def game(username):
                 move = 'still'
             avex2 = avex1
             avey2 = avey1
+            connection = True
    
         except:
-            move = 'still'
+            try:
+                if connection:
+                    print(1)
+                    pause()
+                    print(2)
+            except:
+                move = ' '
+            move = 'disconnected'
+
 
         _, frame = cap.read()
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -565,8 +1005,6 @@ def game(username):
                 colour = (255,0,0)
                 startan = 0
 
-        #if move == 'pause':
-            #pause()
 
         for event in pygame.event.get():            
             if event.type == pygame.QUIT:
@@ -795,7 +1233,7 @@ def menu(username):
             pygame.draw.rect(screen, (255,255,255), (scorepos[0],scorepos[1],60,10))
             pygame.draw.rect(screen, (0,0,255), (scorepos[0], scorepos[1], lb_time*1.5, 10))
             if lb_time == 40:
-                leaderboards()
+                leaderboards(username)
         else:
             lb_time = 0
 
@@ -812,4 +1250,5 @@ def menu(username):
 
         pygame.display.update()
 
+game('test')
 login_signup()
